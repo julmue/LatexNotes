@@ -1,0 +1,19 @@
+Zuerst
+	
+	" irgend so ein kompressionstool
+	sudo apt-get install xzdec
+
+	" beim ersten mal machen:
+	tlmgr init-usertree
+
+	" dann
+	tlmgr repository add http://www.komascript.de/~mkohm/texlive-KOMA KOMA
+	tlmgr pinning add KOMA koma-script
+	tlmgr install --reinstall koma-script
+
+tlmgr verwenden:
+
+	tlmgr update --all
+	tlmgr update --list
+	tlmgr update --self
+
