@@ -49,6 +49,7 @@ Im Prinzip gleich wie Klassen nur ein paar andere Befehle; Todo.
 * [Link](https://www.sharelatex.com/learn/Writing_your_own_class)
 
 Die Struktur einer Klassendatei (`*.cls`):
+
 1. Identifikation: Name des Pakets.
 2. (Initialisierende) Deklarationen: 
    Importieren der externen Pakete die für die Klasse gebraucht werden.
@@ -82,6 +83,7 @@ und haben Abhängigkeiten zu weiteren externen Paketen.
     \definecolor{slcolor}{HTML}{882B21}
 
 Die Befehle in diesem Abschnitt fallen in zwei Kategorien:
+
 1. Definition von Makros zur Verarbeitung von Optionen (im nächsten Abschnitt)
 2. Importe von Paketen deren Funktion in der Klasse benötigt werden
 
@@ -125,6 +127,7 @@ Dieser Befehl verarbeitet eine übergebene Option. Zwei Parameter:
 
 `DeclareOption`:
 Dieser Befehl verarbeitet unbekannte übergebene Optionen. Ein Parameter:
+
 1. Code der ausgeführt wird wenn eine unbekannte Option übergeben wurde.
    (In diesem Fall Weiterleitung and die unterliegende Klasse.)
 
@@ -153,6 +156,7 @@ Jetzt folgen weitere Deklarationen. Beispiel:
     }
  
 Alle Klassen müssen folgende vier Befehle enthalten:
+
 1. Den Defaultwert von `normalsize` (default font size)
 2. Den Defaultwert von `textwidth`
 3. Den Defaultwert von `textheight`
