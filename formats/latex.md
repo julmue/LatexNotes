@@ -61,7 +61,7 @@ Die Struktur einer Klassendatei (`*.cls`):
 
 Diese zwei Befehle müssen in jeder Klasse enthalten sein:
 
-    \NeedsTexFormat{LaTeX2e}
+    \NeedsTeXFormat{LaTeX2e}
     \ProvidesClass{exampleclass}[2013/08/12 Example Latex Class]
 
 Das Datum sollte in der Form `YYYY/MM/DD` sein.
@@ -72,7 +72,7 @@ Die meisten Klassen bauen auf existierenden Standardklassen auf,
 und haben Abhängigkeiten zu weiteren externen Paketen.
 
     % 1. Identification
-    \NeedsTexFormat{LaTeX2e}
+    \NeedsTeXFormat{LaTeX2e}
     \ProvidesClass{exampleclass}[2013/08/12 Example Latex Class]
 
     % 2. Preliminary Declarations
@@ -113,12 +113,13 @@ Die Klasse kann durch Optionen parametrisiert werden:
 
     # 3. Optionen
     \DeclareOption{onecolumn}{\OptionNotUsed}
-    \DeclareOption{green}{\renewcommand}{\headlinecolor}{\color{green}}}
+    \DeclareOption{green}{\renewcommand{\headlinecolor}{\color{green}}}
     \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
     \ProcessOptions\relax
 
 `DeclareOption`:
 Dieser Befehl verarbeitet eine übergebene Option. Zwei Parameter:
+
 1. Name der Option
 2. Code der ausgeführt wird wenn die Option übergeben wurde.
 
