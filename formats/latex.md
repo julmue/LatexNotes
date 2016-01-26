@@ -135,11 +135,11 @@ Dieser Befehl verarbeitet unbekannte übergebene Optionen. Ein Parameter:
 Gibt die Optionen in der ersten Klammer an die Klasse in der zweiten Klammer 
 weiter (hier `article`).
 
-##### `CurrentOption`
+###### `CurrentOption`
 
 In diesem Makro sind die Namen der übrigen Optionen gespeichert.
 
-##### `ProcessOptions\relax`
+###### `ProcessOptions\relax`
 Führt die Verarbeitung der Optionen aus und muss am Ende der Befehle zur 
 Verarbeitung von Optionen stehen.
 
