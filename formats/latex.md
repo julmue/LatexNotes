@@ -1,14 +1,16 @@
 # LATEX
 
 ---
+---
 ## Eigene Makros und Environments
 
 * [Link](https://en.wikibooks.org/wiki/LaTeX/Macros)
 
 
+---
 ### Makros
 
-#### Kommandos/Makros definieren: `\newcommand`/`providecommand`
+#### Kommandos/Makros definieren: `newcommand`/`providecommand`
 
 
 ##### Befehlsstruktur
@@ -30,7 +32,8 @@ Beispiel
     \newcommand{\important}[1]{\textbf{\color{red}#1}}
 
 Ist ein Makro mit dem gleichen Namen bereits definiert bricht LaTeX
-bei der Kompilation mit einem Fehler ab. Siehe `renewcommand`
+bei der Kompilation mit einem Fehler ab. Um Kommandos zu überschreiben siehe 
+`renewcommand`.
 
 `providecommand` gleicht `newcommand` mit einem Unterschied:
 Ist ein Makro mit gleichem Namen bereits definiert wird dieses Makro verwendet,
@@ -38,11 +41,11 @@ kein Kompilierungsfehler wird ausgegeben.
 
 ##### Defaultwerte für die Parameter
 
-Mit LaTeX2e ist es möglich den Parametern defaultwerte zuzuweisen:
+Mit LaTeX2e ist es möglich dem ersten Parameter einen Defaultwert zuzuweisen:
 
     \newcommand{name}[num][default]{definition}
 
-Wenn ein `default` Wert angegeben wird *gilt dieser für das erste Argument*
+Wenn ein `default` Wert angegeben wird gilt dieser für das *erste Argument*
 des Makros. Beispiel:
 
     \newcommand{\elr}[2][Raymond]{#2 loves #1}
@@ -54,12 +57,13 @@ Anwendung:
 
 Frage: 
 Ist es möglich für alle Werte einen Defaultwert anzugeben?
+Siehe Übergabe von Key/Value - Paaren.
 
 
 #### Kommandos/Makros überschreiben: `renewcommand`
 
 Latex erlaubt nicht das bereits definierte Kommandos mit `newcommand` 
-überschrieben werden; überschreigungen werden mit `renewcommand` definiert:
+überschrieben werden; Überschreibungen werden mit `renewcommand` definiert:
 
     \renewcommand{name}[num]{definition}
 
@@ -74,6 +78,7 @@ Todo: Was macht `DeclareRobustCommand` genau?
 
 
 
+---
 ### Environments
 
 Neue Environments werden mit dem Befehl `newenvironment` definiert:
@@ -96,6 +101,7 @@ Beispiel:
 Anwendung:
    
     \begin{king}
+    Humble Subjects!
     \end{king}
 
 
@@ -140,6 +146,8 @@ Anwendung:
     \end{topics}
 
 
+
+---
 ### Die Anzahl der Parameter erweitern / Key/Value-Paare übergeben
 
 Beispiel `xkeyval`. Geht das auch mit `pgfkeys`?
@@ -148,6 +156,8 @@ Damit kann man vermutlich auch defaultwerte für alle übergebenen Parameter
 einrichten.
 
 
+
+---
 ### Arithmetik
 
 LaTeX kann Arithmetik.
@@ -156,11 +166,15 @@ Pakete: `calc` und `pfgmath`
 Todo: Evaluieren welches der beiden Pakete besser ist.
 
 
+
+---
 ### Konditionale
 
 Siehe `etoolbox` Booleans
 
 
+
+---
 ### Loops
 
 #### Loops in etoolbox
@@ -171,12 +185,16 @@ Siehe `etoolbox` Booleans
 Paket `foreach`.
  
 
+
+---
 ### Strings
 
 Siehe `etoolbox` Strings.
 Welches Paket ist besser `etoolbox`, `xstrings`, `pgf`?
 
 
+
+---
 ### Latex Hooks
 
 Standardmäßig bietet Latex zwei Hooks an:
@@ -189,9 +207,14 @@ Funktioniert das wie Signals? Also kann mehr als ein Kommando da eingetragen
 werden oder wird das überschrieben?
 
 
-## Wichtige Pakete für die Latex-Programmierung
 
-### etoolbox
+---
+---
+### Wichtige Pakete für die Latex-Programmierung
+
+
+---
+#### etoolbox
 
 Viele wichtige Konstrukte:
 * Hooks
@@ -210,13 +233,14 @@ Viele wichtige Konstrukte:
 `etoolbox` sollte statt `ifthen` und verwandten Paketen verwendet werden.
 
 
-### pgf System
+#### pgf System
 
-#### pgfkeys
+##### pgfkeys
 
-#### pgfmath
+##### pgfmath
 
 
+---
 ---
 ## Eigene Klassen und Pakete: `.cls` und `.sty` Dateien
 
@@ -243,6 +267,9 @@ Pakete ergänzen diesen Funktionsumfang dann.
 * [Link](http://tutex.tug.org/pracjourn/2005-4/hefferon/hefferon.pdf)
 * [Link](https://www.sharelatex.com/learn/Writing_your_own_class)
 
+
+
+---
 ### Klasse oder Paket?
 
 * [Link](https://www.sharelatex.com/learn/Understanding_packages_and_class_files)
@@ -255,12 +282,18 @@ Daumenregel:
 * Wenn eine Datei Makros enthält, die unabhängig vom Dokumenttyp sind,
   dann sollten sie in ein Paket ausgelagert werden.
 
+
+
+---
 ### Pakete
 
 * [Link](https://www.sharelatex.com/learn/Writing_your_own_package)
 
 Im Prinzip gleich wie Klassen nur ein paar andere Befehle; Todo.
 
+
+
+---
 ### Klassen
 
 * [Link](https://www.sharelatex.com/learn/Writing_your_own_class)
@@ -393,12 +426,18 @@ Beispiel:
 Todo
 
 
+
+---
 ### Key-Value Paare als Optionen übergeben
 
 * [Link](https://tex.stackexchange.com/questions/34312/how-to-create-a-command-with-key-values)
 
 Ein bißchen Einabreitung aber es schein sich zu lohnen: `pgfkeys`.
 
+
+
+---
+---
 ## FAQ
 * [Welche Pakete standardmäßig laden?](https://tex.stackexchange.com/questions/823/remove-ugly-borders-around-clickable-cross-references-and-hyperlinks)
 * [`\include` vs `\input`](https://tex.stackexchange.com/questions/246/when-should-i-use-input-vs-include)
