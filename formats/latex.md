@@ -119,13 +119,13 @@ Die Klasse kann durch Optionen parametrisiert werden:
     \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
     \ProcessOptions\relax
 
-`DeclareOption`:
+###### `DeclareOption`
 Dieser Befehl verarbeitet eine übergebene Option. Zwei Parameter:
 
 1. Name der Option
 2. Code der ausgeführt wird wenn die Option übergeben wurde.
 
-`DeclareOption`:
+###### `DeclareOption*`
 Dieser Befehl verarbeitet unbekannte übergebene Optionen. Ein Parameter:
 
 1. Code der ausgeführt wird wenn eine unbekannte Option übergeben wurde.
@@ -135,9 +135,11 @@ Dieser Befehl verarbeitet unbekannte übergebene Optionen. Ein Parameter:
 Gibt die Optionen in der ersten Klammer an die Klasse in der zweiten Klammer 
 weiter (hier `article`).
 
-`CurrentOption`: speichert die Namen der Übrigen Optionen.
+##### `CurrentOption`
 
-`ProcessOptions\relax`:
+In diesem Makro sind die Namen der übrigen Optionen gespeichert.
+
+##### `ProcessOptions\relax`
 Führt die Verarbeitung der Optionen aus und muss am Ende der Befehle zur 
 Verarbeitung von Optionen stehen.
 
