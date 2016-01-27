@@ -57,6 +57,7 @@ Anwendung:
 
 Frage: 
 Ist es möglich für alle Werte einen Defaultwert anzugeben?
+[Link](https://tex.stackexchange.com/questions/29973/more-than-one-optional-argument-for-newcommand)
 Siehe Übergabe von Key/Value - Paaren.
 
 
@@ -150,12 +151,241 @@ Anwendung:
 ---
 ### Die Anzahl der Parameter erweitern / Key/Value-Paare übergeben
 
-Beispiel `xkeyval`. Geht das auch mit `pgfkeys`?
+Die beste Möglichkeit einem Makro Key-Value-Paare zu übergeben ist das Paket 
+`pgfkeys`. Das Paket `pgfopts` erweitert diese Funktion um die Übergabe von
+Key-Value-Paaren an Pakete.
 
-Damit kann man vermutlich auch defaultwerte für alle übergebenen Parameter 
-einrichten.
+#### PGF Keys
+
+`pgfkeys` ist ähnlich zu `keyval` und `xkeyval`, hat aber eine etwas 
+unterschiedliche Philosopie:
+* `pgfkeys` organisiert Schlüssel in einem Baum, `xkeyval` verwendet Familien.
+  In `pgfkeys` korrespondieren Familien zu den Wurzelknoten des Baumes.
+* `pgfkeyz` unterstützt styles. Das bedeutet, dass Schlüssel für andere 
+   Schlüssel stehen können.
+* Unterstützung von multi-Argument Keycodes.
+* Unterstützung von Handlern.
+
+##### Organisation der Schlüssel in einem Schlüsselbaum
+Schlüssel werden in einem Baum organisiert (ähnlich dem Unix-Verzeichnisbaum).
+Beispiel: `/tikz/coordinate system/x` oder nur `/x`.
+Der Pfad kann dabei komplett angegeben werden oder nur der Name des Schlüssels
+(wie wird dieser Name aufgelöst? Gibt es da keine Clashes?)
+
+##### Das Kommando `pfgkeys`
+Typischerweise (aber nicht notwendigerweise) wird ein Schlüssel mit Code
+assoziiert. Um den mit einem Schlüssel identifizierten Code auszuführen muss das 
+`pgfkeys` Kommando verwendet werden. Diese Kommando erwartet eine Liste von 
+Schlüssel-Wert-Paaren (key-value-pairs); 
+jedes Paar ist von der Form `<key>=<value>`
+Für jedes Argumentpaar wird der mit `key` assoziierte Code 
+mit dem auf `value` gesetzten Wert ausgeführt.
+
+Beispiel: Übergabe von Optionen an Schlüssel
+
+    \pgfkeys{/my key=hallo,/your keys/main key=something\strange,
+             key name without path=something else}
+
+Mit dem Kommando `pgfkeys` wird den Schlüsseln auch der Code zugewiesen.
+Die geschieht durch die Zuweisung von `handlern`.
+Diese Sehen wie Schlüssel aus, die der Namenskonvention der *hidden files* in
+Unix entsprechen und mit einem Punkt beginnen;
+diese handler werden *./code* genannt.
+
+Beispiel: Zuweisung von Code zu Schlüsseln
+
+    % key definition
+    \pgfkeys{/my key/.code=The value is '#1'.}
+
+    % key lookup
+    \pgfkeys{/my key=hi!}
+
+    % result
+    % -> The value is 'hi'!.
+
+###### Schlüssel mit mehreren Argumenten
+
+Ein Schlüssel kann auch mit mehr als einem Parameter definiert werden:
+
+    \pgfkeys{/my key/.code 2 args=The values are '#1" and '#2'.}
+    \pgfkeys{/my key={a1}{a2}}
+
+###### Defaultwerte von Schlüsseln
+
+Defaultwerte werden auch mit einem Handler definiert:
+
+    % key and default definition
+    \pgfkeys{/my key/.code={#1}}
+    \pgfkeys{/my key/.default=hello}
+
+    % key lookup
+    \pfgkeyz{\my key}
+
+    % result
+    % -> hello
+
+##### Schlüssel erzwingen oder verbieten
+
+Die Angabe eines bestimmten Schlüssels kann durch `.value required` erzwungen werden:
+
+    \pgfkeys{/my key/.code={#1}}
+    \pgfkeys{/my key/.value required}
+
+Die Angabe eines bestimmten Schlüssels kann durch `.value forbidden` verboten werden:
+
+    \pgfkeys{/my key/.code={#1}}
+    \pgfkeys{/my key/.value forbidden}
+
+(Und was soll das bringen?)
 
 
+##### Verzeichnisse wechseln
+
+Alle Schlüssel für ein bestimmtes Paket liegen unter einem Wurzelknoten
+(beispielsweise `tikz`). 
+Es ist nicht notwendig jedesmal den gesamten Pfad zu einem Schlüssel anzugeben.
+das *Verzeichnis* kann gewechselt werden um Amibuitäten zu vermeiden;
+Kommando: `.cd` (change directory)
+
+    \pgfkeys{/tikz/.cd, line width=1cm,line cap=round}
+
+Damit können Makros wie das folgende definiert werden:
+
+    \def\tikzset#1{pgfkeys{/tikz/.cd,#1}}
+
+
+##### Schlüssel die Schlüssel ausführen: Styles
+
+Style: Schlüssel der eine Liste von Schlüsseln enhält.
+
+Ein Schlüssel muss nicht zwingend Code ausführen ... er kann auch weitere
+Schlüssel ausführen; ein solcher Schlüssel wird als *Style* bezeichnet.
+
+    \pgfkeys{/a/.code=(a:#1)}
+    \pgfkeys{/b/.code=(b:#1)}
+    \pgfkeys{/my style/.style=(/a=foo,/b=bar,/a=#1)}
+    \pgfkeys{/my style=wow}
+
+Wie dieses Beispiel zeigt können Styles parametrisiert werden.
+
+Anwendungsbeispiel eines Syles: Definieren eines Keys der bei Aktivierung
+in ein bestimmtes Verzeichnis wechselt.
+
+    \pgfkeys{/tikz/.style=/tikz/.cd}
+    \pgfkeys{tikz,line width=1cm, draw=red}
+
+Der Defaultpfad für die Ausführung von `pgfkeys` ist `/`.
+
+
+##### Der Schlüsselbaum (Key Tree)
+
+Schlüssel werden in einem Schlüsselbaum gespeichert; dieser ist so aufgebaut 
+wie der Dateibaum von unixoiden Systemen.
+
+Terminologie am beispiel `/a/b/c`:
+* `/a/b`: Pfad des Schlüssels (analog zum Ordnerpfad)
+* `c`: Schlüssel (analog zur Datei)
+
+Wenn ein Schlüssel ohne Pfad, nur mit dem Namen referenziert wird,
+dann wir der Default Pfad als Präfix verwendet (also das aktuelle Vz).
+Außerhalb dieses Default Pfads wird nicht nach dem Schlüssel gesucht.
+
+
+###### Default Path
+
+
+
+###### Definition/Setzen von Schlüsseln
+
+Schlüssel werden mit dem Kommando `pgfkeys` gesetzt.
+
+Dieses Kommando erwartet eine Liste von Schlüssel-Wert-Paaren.
+Idee: Für jeden Schlüssel in der Liste wird eine Aktion ausgeführt:
+
+1. Ausführen von Code:
+   Ein Kommando wird ausgeführt dessen Argumente `<value>` sind.
+   Dieses Kommando ist in einem speziellen Unterschlüssel des Schlüssels
+   gespeichert (`.code`).
+
+2. Speichern von Werten im Schlüssel:
+   Der Wert (`<value>`) wird im Schlüssel selbst gespeichert.
+
+3. Zuweisen von Handlern:
+   Wenn der Name des Schlüssles ein bekannter handler ist, dann wird 
+   dieser Handler dem Schlüssel zugeordnet.
+   (also alle Unterschlüssel die mit `.xxx` beginnen 
+
+4. Abfangen unbekannter Schlüssel (error recovery):
+   Wenn der Schlüssel komplett unbekannt ist werden 
+   *unknown key handlers* ausgeführt.
+
+Zusätzlich:
+Wenn kein Wert angegeben wurde wird der Defaultwert eingesetzt.
+
+###### Das Kommando `pgfkeys`
+
+* Zu Beginn immer `/` als Defaultpfad
+* Ababreitung der Argumente in Reihenfolge
+* Schachtelung möglich
+
+###### Schlüssel denen Code zugeordnet ist
+
+Schlüssel wird ausgeführt wenn er Code enthält.
+
+
+###### Schlüssel die Werte speichern
+
+Wenn der Schlüssel noch nicht angelegt ist, wird dieser angelegt.
+
+###### Schlüssel mit einem Handler
+
+
+
+
+###### Key Handlers
+
+Key Handler kommen in zwei Sorten:
+* selbstdefiniert
+* standardmäßig definiert
+
+Handler die standardmäßig definiert sind:
+
+1. Handler für das Pfadmanagement:
+    * `<key>/.cd`: 
+      Default Pfad wird auf `key` gesetzt.
+      Der default Pfad wird bei jedem neuen Aufruf von `pgfkeys` zurückgesetzt.
+    * `<key>/.is family`:
+      Der aktuelle Pfad wird auf <key> gesetzt (???).
+      Handler ist gleich wie `<key>/.style=<key>/.cd`
+2. Default definieren:
+    * `<key>/.default=<value>`
+    * `<key>/.value required>`
+    * `<key>/.value forbidden>`
+3. Key Code definieren
+    * `<key>/.code=<code>`: 1 Argument.
+    * `<key>/.code 2 args=<code>`: 2 Argumente.
+    * `<key>/.code n args=<code>`: bis zu 9 Argumente.
+    * `<key>/.code args=<code>`
+    * `<key>/.add code=<code>`: Fügt Code zu einem existierenden Schlüssel hinzu
+    * `<key>/.prefix code=<code>`: 
+    * `<key>/.append code=<code>`: 
+4. Styles definieren
+   ...
+5. Todo ...
+
+
+##### Familien
+
+`pgfkeys` unterstützt Schlüsselfamilien.
+Jeder Schlüssel kann mit maximal einer Familie assoziiert werden;
+(Familien sind sowas wie Tags und sind unabhängig vom Schlüsselbaum).
+
+Kommandos:
+* `<key>/.is family
+    Definiert eine neue Familie.
+* `<key>/.activate family`
+* `<key>/.deactivate family`
+* ..
 
 ---
 ### Arithmetik
