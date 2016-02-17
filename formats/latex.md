@@ -400,6 +400,7 @@ Todo: Evaluieren welches der beiden Pakete besser ist.
 ---
 ### Konditionale
 
+* [etoolbox instead of ifthen](https://tex.stackexchange.com/questions/13866/why-is-the-ifthen-package-obsolete)
 Siehe `etoolbox` Booleans
 
 
